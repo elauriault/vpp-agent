@@ -14,41 +14,52 @@
 
 package vpp_lb_test
 
-/*func TestLBKey(t *testing.T) {
+import (
+	"testing"
+
+	lb "go.ligato.io/vpp-agent/v3/proto/ligato/vpp/lb"
+)
+
+func TestLBVipKey(t *testing.T) {
 	tests := []struct {
-		name         string
-		lbInterface string
-		lbIP        string
-		expectedKey  string
+		name        string
+		prefix      string
+		protocol    uint32
+		port        uint32
+		expectedKey string
 	}{
 		{
-			name:         "valid LB case",
-			lbInterface: "if1",
-			lbIP:        "10.0.0.1",
-			expectedKey:  "vpp/config/v2/lb/rule/if1/ip/10.0.0.1",
+			name:        "valid VIP case: no protocol/port",
+			prefix:      "10.0.0.1",
+			protocol:    0,
+			port:        0,
+			expectedKey: "config/vpp/lb/v2/lb-vip/10.0.0.1",
 		},
 		{
-			name:         "invalid LB case (undefined interface)",
-			lbInterface: "",
-			lbIP:        "10.0.0.1",
-			expectedKey:  "vpp/config/v2/lb/rule/<invalid>/ip/10.0.0.1",
+			name:        "valid VIP case: protocol/port",
+			prefix:      "10.0.0.1",
+			protocol:    6,
+			port:        80,
+			expectedKey: "config/vpp/lb/v2/lb-vip/10.0.0.1/6/80",
 		},
 		{
-			name:         "invalid LB case (undefined address)",
-			lbInterface: "if1",
-			lbIP:        "",
-			expectedKey:  "vpp/config/v2/lb/rule/if1/ip/<invalid>",
+			name:        "invalid VIP case: no protocol/port",
+			prefix:      "<invalid>",
+			protocol:    0,
+			port:        0,
+			expectedKey: "config/vpp/lb/v2/lb-vip/<invalid>",
 		},
 		{
-			name:         "invalid LB case (IP address with mask provided)",
-			lbInterface: "if1",
-			lbIP:        "10.0.0.1/24",
-			expectedKey:  "vpp/config/v2/lb/rule/if1/ip/<invalid>",
+			name:        "invalid VIP case: protocol/port",
+			prefix:      "10.0.0.1",
+			protocol:    0,
+			port:        80,
+			expectedKey: "config/vpp/lb/v2/lb-vip/10.0.0.1",
 		},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			key := lb.Key(test.lbInterface, test.lbIP)
+			key := lb.LBVipKey(test.prefix, test.protocol, test.port)
 			if key != test.expectedKey {
 				t.Errorf("failed for: lbName=%s\n"+
 					"expected key:\n\t%q\ngot key:\n\t%q",
@@ -56,64 +67,58 @@ package vpp_lb_test
 			}
 		})
 	}
-}*/
+}
 
-/*func TestParseLBKey(t *testing.T) {
+func TestLBAsKey(t *testing.T) {
 	tests := []struct {
-		name             string
-		key              string
-		expectedIfName   string
-		expectedIP       string
-		expectedIsLBKey bool
+		name        string
+		prefix      string
+		protocol    uint32
+		port        uint32
+		address     string
+		expectedKey string
 	}{
 		{
-			name:             "valid LB key",
-			key:              "vpp/config/v2/lb/rule/if1/ip/10.0.0.1",
-			expectedIfName:   "if1",
-			expectedIP:       "10.0.0.1",
-			expectedIsLBKey: true,
+			name:        "valid AS case: no protocol/port",
+			prefix:      "10.0.0.1",
+			protocol:    0,
+			port:        0,
+			address:     "1.2.3.4",
+			expectedKey: "config/vpp/lb/v2/lb-as/10.0.0.1/1.2.3.4",
 		},
 		{
-			name:             "invalid if",
-			key:              "vpp/config/v2/lb/rule/<invalid>/ip/10.0.0.1",
-			expectedIfName:   "<invalid>",
-			expectedIP:       "10.0.0.1",
-			expectedIsLBKey: true,
+			name:        "valid AS case: protocol/port",
+			prefix:      "10.0.0.1",
+			protocol:    6,
+			port:        80,
+			address:     "1.2.3.4",
+			expectedKey: "config/vpp/lb/v2/lb-as/10.0.0.1/6/80/1.2.3.4",
 		},
 		{
-			name:             "invalid LB",
-			key:              "vpp/config/v2/lb/rule/if1/ip/<invalid>",
-			expectedIfName:   "if1",
-			expectedIP:       "<invalid>",
-			expectedIsLBKey: true,
+			name:        "invalid AS case: bad prefix",
+			prefix:      "<invalid>",
+			protocol:    0,
+			port:        0,
+			address:     "1.2.3.4",
+			expectedKey: "config/vpp/lb/v2/lb-as/<invalid>/1.2.3.4",
 		},
 		{
-			name:             "invalid all",
-			key:              "vpp/config/v2/lb/rule/<invalid>/ip/<invalid>",
-			expectedIfName:   "<invalid>",
-			expectedIP:       "<invalid>",
-			expectedIsLBKey: true,
-		},
-		{
-			name:             "not LB key",
-			key:              "vpp/config/v2/bd/bd1",
-			expectedIfName:   "",
-			expectedIP:       "",
-			expectedIsLBKey: false,
+			name:        "invalid AS case: bad address protocol/port",
+			prefix:      "10.0.0.1",
+			protocol:    6,
+			port:        80,
+			address:     "<invalid>",
+			expectedKey: "config/vpp/lb/v2/lb-as/10.0.0.1/6/80/<invalid>",
 		},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			ifName, ip, isLBKey := lb.ParseKey(test.key)
-			if isLBKey != test.expectedIsLBKey {
-				t.Errorf("expected isFIBKey: %v\tgot: %v", test.expectedIsLBKey, isLBKey)
-			}
-			if ifName != test.expectedIfName {
-				t.Errorf("expected ifName: %s\tgot: %s", test.expectedIfName, ifName)
-			}
-			if ip != test.expectedIP {
-				t.Errorf("expected IP: %s\tgot: %s", test.expectedIP, ip)
+			key := lb.LBAsKey(test.prefix, test.protocol, test.port, test.address)
+			if key != test.expectedKey {
+				t.Errorf("failed for: lbName=%s\n"+
+					"expected key:\n\t%q\ngot key:\n\t%q",
+					test.name, test.expectedKey, key)
 			}
 		})
 	}
-}*/
+}
