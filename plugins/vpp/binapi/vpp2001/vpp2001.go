@@ -30,6 +30,7 @@ import (
 	"go.ligato.io/vpp-agent/v3/plugins/vpp/binapi/vpp2001/ipsec"
 	"go.ligato.io/vpp-agent/v3/plugins/vpp/binapi/vpp2001/l2"
 	"go.ligato.io/vpp-agent/v3/plugins/vpp/binapi/vpp2001/l3xc"
+	"go.ligato.io/vpp-agent/v3/plugins/vpp/binapi/vpp2001/lb"
 	"go.ligato.io/vpp-agent/v3/plugins/vpp/binapi/vpp2001/memclnt"
 	"go.ligato.io/vpp-agent/v3/plugins/vpp/binapi/vpp2001/memif"
 	"go.ligato.io/vpp-agent/v3/plugins/vpp/binapi/vpp2001/nat"
@@ -73,6 +74,7 @@ func init() {
 			acl.AllMessages,
 			gtpu.AllMessages,
 			l3xc.AllMessages,
+			lb.AllMessages,
 			memif.AllMessages,
 			nat.AllMessages,
 			stn.AllMessages,
@@ -113,6 +115,7 @@ func init() {
 //go:generate binapigen --input-file=$VPP_API_DIR/plugins/gtpu.api.json
 //go:generate binapigen --input-file=$VPP_API_DIR/plugins/dhcp.api.json
 //go:generate binapigen --input-file=$VPP_API_DIR/plugins/l3xc.api.json
+//go:generate binapigen --input-file=$VPP_API_DIR/plugins/lb.api.json
 //go:generate binapigen --input-file=$VPP_API_DIR/plugins/memif.api.json
 //go:generate binapigen --input-file=$VPP_API_DIR/plugins/nat.api.json
 //go:generate binapigen --input-file=$VPP_API_DIR/plugins/stn.api.json

@@ -43,6 +43,7 @@ import (
 	l2vppcalls "go.ligato.io/vpp-agent/v3/plugins/vpp/l2plugin/vppcalls"
 	"go.ligato.io/vpp-agent/v3/plugins/vpp/l3plugin"
 	l3vppcalls "go.ligato.io/vpp-agent/v3/plugins/vpp/l3plugin/vppcalls"
+	lbvppcalls "go.ligato.io/vpp-agent/v3/plugins/vpp/lbplugin/vppcalls"
 	natvppcalls "go.ligato.io/vpp-agent/v3/plugins/vpp/natplugin/vppcalls"
 	puntvppcalls "go.ligato.io/vpp-agent/v3/plugins/vpp/puntplugin/vppcalls"
 )
@@ -71,6 +72,7 @@ type Plugin struct {
 	aclHandler   aclvppcalls.ACLVppRead
 	ifHandler    ifvppcalls.InterfaceVppRead
 	natHandler   natvppcalls.NatVppRead
+	lbHandler    lbvppcalls.LbVppRead
 	l2Handler    l2vppcalls.L2VppAPI
 	l3Handler    l3vppcalls.L3VppAPI
 	ipSecHandler ipsecvppcalls.IPSecVPPRead
@@ -162,6 +164,10 @@ func (p *Plugin) Init() (err error) {
 	p.natHandler = natvppcalls.CompatibleNatVppHandler(p.VPP, ifIndexes, dhcpIndexes, p.Log)
 	if p.natHandler == nil {
 		p.Log.Infof("NAT handler is not available, it will be skipped")
+	}
+	p.lbHandler = lbvppcalls.CompatibleLbVppHandler(p.VPP, ifIndexes, p.Log)
+	if p.lbHandler == nil {
+		p.Log.Infof("LB handler is not available, it will be skipped")
 	}
 	p.puntHandler = puntvppcalls.CompatiblePuntVppHandler(p.VPP, ifIndexes, p.Log)
 	if p.puntHandler == nil {
