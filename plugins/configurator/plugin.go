@@ -36,6 +36,7 @@ import (
 	l2vppcalls "go.ligato.io/vpp-agent/v3/plugins/vpp/l2plugin/vppcalls"
 	"go.ligato.io/vpp-agent/v3/plugins/vpp/l3plugin"
 	l3vppcalls "go.ligato.io/vpp-agent/v3/plugins/vpp/l3plugin/vppcalls"
+	lbvppcalls "go.ligato.io/vpp-agent/v3/plugins/vpp/lbplugin/vppcalls"
 	natvppcalls "go.ligato.io/vpp-agent/v3/plugins/vpp/natplugin/vppcalls"
 	puntvppcalls "go.ligato.io/vpp-agent/v3/plugins/vpp/puntplugin/vppcalls"
 	wireguardvppcalls "go.ligato.io/vpp-agent/v3/plugins/vpp/wireguardplugin/vppcalls"
@@ -145,6 +146,10 @@ func (p *Plugin) initHandlers() (err error) {
 	}
 	p.configurator.natHandler = natvppcalls.CompatibleNatVppHandler(p.VPP, ifIndexes, dhcpIndexes, p.Log)
 	if p.configurator.natHandler == nil {
+		p.Log.Info("VPP NAT handler is not available, it will be skipped")
+	}
+	p.configurator.lbHandler = lbvppcalls.CompatibleLbVppHandler(p.VPP, ifIndexes, p.Log)
+	if p.configurator.lbHandler == nil {
 		p.Log.Info("VPP NAT handler is not available, it will be skipped")
 	}
 	p.configurator.puntHandler = puntvppcalls.CompatiblePuntVppHandler(p.VPP, ifIndexes, p.Log)

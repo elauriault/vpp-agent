@@ -28,6 +28,7 @@ import (
 	ipsecvppcalls "go.ligato.io/vpp-agent/v3/plugins/vpp/ipsecplugin/vppcalls"
 	l2vppcalls "go.ligato.io/vpp-agent/v3/plugins/vpp/l2plugin/vppcalls"
 	l3vppcalls "go.ligato.io/vpp-agent/v3/plugins/vpp/l3plugin/vppcalls"
+	lbvppcalls "go.ligato.io/vpp-agent/v3/plugins/vpp/lbplugin/vppcalls"
 	natvppcalls "go.ligato.io/vpp-agent/v3/plugins/vpp/natplugin/vppcalls"
 	"go.ligato.io/vpp-agent/v3/plugins/vpp/puntplugin/vppcalls"
 	wireguardvppcalls "go.ligato.io/vpp-agent/v3/plugins/vpp/wireguardplugin/vppcalls"
@@ -57,6 +58,7 @@ type dumpService struct {
 	aclHandler  aclvppcalls.ACLVppRead
 	abfHandler  abfvppcalls.ABFVppRead
 	natHandler  natvppcalls.NatVppRead
+	lbHandler   lbvppcalls.LbVppRead
 	puntHandler vppcalls.PuntVPPRead
 	wireguardHandler wireguardvppcalls.WgVppRead
 

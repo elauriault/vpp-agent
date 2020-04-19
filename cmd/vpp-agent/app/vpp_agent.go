@@ -45,6 +45,7 @@ import (
 	"go.ligato.io/vpp-agent/v3/plugins/vpp/ipsecplugin"
 	"go.ligato.io/vpp-agent/v3/plugins/vpp/l2plugin"
 	"go.ligato.io/vpp-agent/v3/plugins/vpp/l3plugin"
+	"go.ligato.io/vpp-agent/v3/plugins/vpp/lbplugin"
 	"go.ligato.io/vpp-agent/v3/plugins/vpp/natplugin"
 	"go.ligato.io/vpp-agent/v3/plugins/vpp/puntplugin"
 	"go.ligato.io/vpp-agent/v3/plugins/vpp/srplugin"
@@ -181,6 +182,7 @@ type VPP struct {
 	NATPlugin   *natplugin.NATPlugin
 	PuntPlugin  *puntplugin.PuntPlugin
 	STNPlugin   *stnplugin.STNPlugin
+	LBPlugin    *lbplugin.LBPlugin
 	SRPlugin    *srplugin.SRPlugin
 	WgPlugin    *wireguardplugin.WgPlugin
 }
@@ -197,6 +199,7 @@ func DefaultVPP() VPP {
 		NATPlugin:   &natplugin.DefaultPlugin,
 		PuntPlugin:  &puntplugin.DefaultPlugin,
 		STNPlugin:   &stnplugin.DefaultPlugin,
+		LBPlugin:    &lbplugin.DefaultPlugin,
 		SRPlugin:    &srplugin.DefaultPlugin,
 		WgPlugin:    &wireguardplugin.DefaultPlugin,
 	}

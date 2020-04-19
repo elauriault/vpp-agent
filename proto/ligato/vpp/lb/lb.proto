@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package ligato.vpp.lb;
+
+option go_package = "go.ligato.io/vpp-agent/v3/proto/ligato/vpp/lb;vpp_lb";
+
+message LBGlobal {
+    string ip4_src_address = 1;
+    string ip6_src_address = 2;
+    uint32 bucket = 3;
+    uint32 timeout = 4;
+}
+
+message LBVip {
+    string prefix = 1;
+    uint32 protocol = 2;
+    uint32 port = 3;
+    enum Encap {
+        GRE4 = 0;
+        GRE6 = 1;
+        L3DSR = 2;
+        NAT4 = 3;
+        NAT6 = 4;
+    }
+    Encap encap = 4;
+    uint32 dscp = 5;
+    enum Srv_type {
+        CLUSTERIP = 0;
+        NODEPORT = 1;
+        N_TYPES = 2;
+    }
+    Srv_type srv_type = 6;
+    uint32 target_port = 7;
+    uint32 node_port = 8;
+    uint32 new_len = 9;
+}
+
+message LBAs {
+    string prefix = 1;
+    uint32 protocol = 2;
+    uint32 port = 3;
+    string address = 4;
+}
