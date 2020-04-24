@@ -27,23 +27,40 @@ import (
 	lb "go.ligato.io/vpp-agent/v3/proto/ligato/vpp/lb"
 )
 
-func (h *LbVppHandler) SetLBConf(address string, buckets uint32, timeout uint32) error {
-	Addr, err := ipTo4Address(address)
-	//	h.log.Warnf("DEBUG_STUFF : SetLBConf %v %v %v %v %v", address, Addr, buckets, timeout, err)
+func (h *LbVppHandler) SetLBConf(address string, buckets uint32, timeout uint32) (err error) {
+	Addr, err := ipToAddress(address)
+	// h.log.Warnf("DEBUG_STUFF : SetLBConf %v %v %v %v %v", address, Addr, buckets, timeout, err)
 	if err != nil {
 		return errors.Errorf("unable to parse source address %s", address)
 	}
-	req := &lbba.LbConf{
-		FlowTimeout:          timeout,
-		IP4SrcAddress:        Addr,
-		StickyBucketsPerCore: buckets,
-	}
 	reply := &lbba.LbConfReply{}
-
-	if err := h.callsChannel.SendRequest(req).ReceiveReply(reply); err != nil {
-		//		h.log.Warnf("DEBUG_STUFF : Inside SetLBConf with error, reply from vpp : %v", reply)
-		return err
+	switch Addr.Af {
+	case ip_types.ADDRESS_IP4:
+		// Addr.Un.GetIP4 doesn't return expected value
+		ip4, err := ipTo4Address(address)
+		req := &lbba.LbConf{
+			FlowTimeout:          timeout,
+			IP4SrcAddress:        ip4,
+			StickyBucketsPerCore: buckets,
+		}
+		// h.log.Warnf("DEBUG_STUFF : SetLBConf before VPP request %v\n", &lbba.LbConf{FlowTimeout: timeout, IP4SrcAddress: Addr.Un.GetIP4(), StickyBucketsPerCore: buckets})
+		// h.log.Warnf("DEBUG_STUFF : SetLBConf before VPP request %v\n", req)
+		if err = h.callsChannel.SendRequest(req).ReceiveReply(reply); err != nil {
+			//		h.log.Warnf("DEBUG_STUFF : Inside SetLBConf with error, reply from vpp : %v", reply)
+			return err
+		}
+	case ip_types.ADDRESS_IP6:
+		req := &lbba.LbConf{
+			FlowTimeout:          timeout,
+			IP6SrcAddress:        Addr.Un.GetIP6(),
+			StickyBucketsPerCore: buckets,
+		}
+		if err = h.callsChannel.SendRequest(req).ReceiveReply(reply); err != nil {
+			//		h.log.Warnf("DEBUG_STUFF : Inside SetLBConf with error, reply from vpp : %v", reply)
+			return err
+		}
 	}
+
 	//	h.log.Warnf("DEBUG_STUFF : Inside SetLBConf, no error reply from vpp : %v", reply)
 	return nil
 
@@ -60,8 +77,8 @@ func (h *LbVppHandler) DelLBVip(prefix string, protocol uint8, port uint16) erro
 func (h *LbVppHandler) UpdateLBVip(prefix string, protocol uint8, port uint16, encap lb.LBVip_Encap, dscp uint8, srv_type lb.LBVip_SrvType, targetport, nodeport uint16, len uint32, del bool) error {
 
 	Pfx, err := toPrefix(prefix, h)
-	h.log.Warnf("DEBUG_STUFF : UpdateLBVip %v %v %v %v", prefix, encap, len, err)
-	h.log.Warnf("DEBUG_STUFF : UpdateLBVip toPrefix %v", Pfx)
+	// h.log.Warnf("DEBUG_STUFF : UpdateLBVip %v %v %v %v", prefix, encap, len, err)
+	// h.log.Warnf("DEBUG_STUFF : UpdateLBVip toPrefix %v", Pfx)
 	if err != nil {
 		return errors.Errorf("unable to parse source address %s", prefix)
 	}
@@ -88,13 +105,13 @@ func (h *LbVppHandler) UpdateLBVip(prefix string, protocol uint8, port uint16, e
 	// targetport          uint16
 	// nodeport            uint16
 	reply := &lbba.LbAddDelVipReply{}
-	h.log.Warnf("DEBUG_STUFF : Inside UpdateLBVip req: %v", req)
+	// h.log.Warnf("DEBUG_STUFF : Inside UpdateLBVip req: %v", req)
 
 	if err := h.callsChannel.SendRequest(req).ReceiveReply(reply); err != nil {
-		h.log.Warnf("DEBUG_STUFF : Inside UpdateLBVip with error, reply from vpp : %v", reply)
+		// h.log.Warnf("DEBUG_STUFF : Inside UpdateLBVip with error, reply from vpp : %v", reply)
 		return err
 	}
-	h.log.Warnf("DEBUG_STUFF : Inside UpdateLBVip, no error reply from vpp : %v", reply)
+	// h.log.Warnf("DEBUG_STUFF : Inside UpdateLBVip, no error reply from vpp : %v", reply)
 	return nil
 }
 
@@ -109,15 +126,15 @@ func (h *LbVppHandler) DelLBAs(prefix string, protocol uint8, port uint16, addre
 func (h *LbVppHandler) UpdateLBAs(prefix string, protocol uint8, port uint16, address string, flush, del bool) error {
 
 	Pfx, err := toPrefix(prefix, h)
-	h.log.Warnf("DEBUG_STUFF : UpdateLBAs %v %v %v %v", prefix, protocol, port, err)
-	h.log.Warnf("DEBUG_STUFF : UpdateLBAs toPrefix %v", Pfx)
+	// h.log.Warnf("DEBUG_STUFF : UpdateLBAs %v %v %v %v", prefix, protocol, port, err)
+	// h.log.Warnf("DEBUG_STUFF : UpdateLBAs toPrefix %v", Pfx)
 	if err != nil {
 		return errors.Errorf("unable to parse CIDR address %s", prefix)
 	}
 
 	Addr, err := ipToAddress(address)
-	h.log.Warnf("DEBUG_STUFF : UpdateLBAs %v %v %v %v", prefix, protocol, port, err)
-	h.log.Warnf("DEBUG_STUFF : UpdateLBAs toPrefix %v", Addr)
+	// h.log.Warnf("DEBUG_STUFF : UpdateLBAs %v %v %v %v", prefix, protocol, port, err)
+	// h.log.Warnf("DEBUG_STUFF : UpdateLBAs toPrefix %v", Addr)
 	if err != nil {
 		return errors.Errorf("unable to parse AS address %s", prefix)
 	}
@@ -131,13 +148,13 @@ func (h *LbVppHandler) UpdateLBAs(prefix string, protocol uint8, port uint16, ad
 		IsFlush:   del,
 	}
 	reply := &lbba.LbAddDelAsReply{}
-	h.log.Warnf("DEBUG_STUFF : Inside UpdateLBAs req: %v", req)
+	// h.log.Warnf("DEBUG_STUFF : Inside UpdateLBAs req: %v", req)
 
 	if err := h.callsChannel.SendRequest(req).ReceiveReply(reply); err != nil {
-		h.log.Warnf("DEBUG_STUFF : Inside UpdateLBAs with error, reply from vpp : %v", reply)
+		// h.log.Warnf("DEBUG_STUFF : Inside UpdateLBAs with error, reply from vpp : %v", reply)
 		return err
 	}
-	h.log.Warnf("DEBUG_STUFF : Inside UpdateLBAs, no error reply from vpp : %v", reply)
+	// h.log.Warnf("DEBUG_STUFF : Inside UpdateLBAs, no error reply from vpp : %v", reply)
 	return nil
 }
 
@@ -176,6 +193,7 @@ func ipToAddress(ipStr string) (addr lbba.Address, err error) {
 	} else {
 		return lbba.Address{}, fmt.Errorf("required IPv4, provided: %q", ipStr)
 	}
+	// fmt.Printf("DEBUG_STUFF : ipToAddress Returning : %v\n", ip_types.Address{Af: af, Un: ip_types.AddressUnion{XXX_UnionData: b}})
 	return ip_types.Address{
 		Af: af,
 		Un: ip_types.AddressUnion{XXX_UnionData: b},
@@ -189,13 +207,13 @@ func toPrefix(ipStr string, h *LbVppHandler) (addr lbba.AddressWithPrefix, err e
 		t    int
 		mask uint8
 	)
-	address, n, e := net.ParseCIDR(ipStr)
-	h.log.Warnf("DEBUG_STUFF : toPrefix ParseCIDR %v %v %v", address, n, e)
+	address, _, e := net.ParseCIDR(ipStr)
+	// h.log.Warnf("DEBUG_STUFF : toPrefix ParseCIDR %v %v %v", address, n, e)
 	if e != nil {
 		address = net.ParseIP(ipStr)
 		if address == nil {
-			h.log.Warnf("DEBUG_STUFF : toPrefix ParseIp %v %v %v", address, n, e)
-			return
+			// h.log.Warnf("DEBUG_STUFF : toPrefix ParseIp %v %v %v", address, n, e)
+			return lbba.AddressWithPrefix{}, fmt.Errorf("required IPv4 prefix, provided: %q", ipStr)
 		}
 		e = nil
 	}

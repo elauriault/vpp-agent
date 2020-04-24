@@ -47,7 +47,7 @@ func NewLBAsDescriptor(lbHandler vppcalls.LbVppAPI, log logging.PluginLogger) *k
 		lbHandler: lbHandler,
 		log:       log.NewLogger("lb-as-descriptor"),
 	}
-	ctx.log.Warnf("DEBUG_STUFF : NewLBAsDescriptor")
+	// ctx.log.Warnf("DEBUG_STUFF : NewLBAsDescriptor")
 
 	typedDescr := &adapter.LBAsDescriptor{
 		Name:          LBAsDescriptorName,
@@ -70,7 +70,7 @@ func NewLBAsDescriptor(lbHandler vppcalls.LbVppAPI, log logging.PluginLogger) *k
 
 // Validate validates AS configuration.
 func (d *LBAsDescriptor) Validate(key string, vip *lb.LBAs) error {
-	d.log.Warnf("DEBUG_STUFF : Validate %v %v", key, vip)
+	// d.log.Warnf("DEBUG_STUFF : Validate %v %v", key, vip)
 
 	switch p := vip.GetProtocol(); p {
 	case 0:
@@ -93,14 +93,14 @@ func (d *LBAsDescriptor) Validate(key string, vip *lb.LBAs) error {
 
 // Create adds new AS
 func (d *LBAsDescriptor) Create(key string, as *lb.LBAs) (metadata interface{}, err error) {
-	d.log.Warnf("DEBUG_STUFF : Create %v %v", key, as)
+	// d.log.Warnf("DEBUG_STUFF : Create %v %v", key, as)
 	d.lbHandler.AddLBAs(as.GetPrefix(), uint8(as.GetProtocol()), uint16(as.GetPort()), as.GetAddress())
 	return nil, nil
 }
 
 // Delete removed AS
 func (d *LBAsDescriptor) Delete(key string, as *lb.LBAs, metadata interface{}) error {
-	d.log.Warnf("DEBUG_STUFF : Delete %v %v", key, as)
+	// d.log.Warnf("DEBUG_STUFF : Delete %v %v", key, as)
 	d.lbHandler.DelLBAs(as.GetPrefix(), uint8(as.GetProtocol()), uint16(as.GetPort()), as.GetAddress())
 	return nil
 }
@@ -108,7 +108,7 @@ func (d *LBAsDescriptor) Delete(key string, as *lb.LBAs, metadata interface{}) e
 // Retrieve returns the current AS.
 
 func (d *LBAsDescriptor) Retrieve(correlate []adapter.LBAsKVWithMetadata) (retrieved []adapter.LBAsKVWithMetadata, err error) {
-	d.log.Warnf("DEBUG_STUFF : Retrieve As")
+	// d.log.Warnf("DEBUG_STUFF : Retrieve As")
 	as_list, err := d.lbHandler.LBAsDump()
 	if err != nil {
 		return nil, err
@@ -119,7 +119,7 @@ func (d *LBAsDescriptor) Retrieve(correlate []adapter.LBAsKVWithMetadata) (retri
 			Value:  as,
 			Origin: kvs.FromNB,
 		})
-		d.log.Warnf("DEBUG_STUFF : Inside Retrieve As : %v", as)
+		// d.log.Warnf("DEBUG_STUFF : Inside Retrieve As : %v", as)
 	}
 	return
 }

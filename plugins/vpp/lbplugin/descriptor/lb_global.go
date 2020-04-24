@@ -53,7 +53,7 @@ func NewLBGlobalDescriptor(lbHandler vppcalls.LbVppAPI, log logging.PluginLogger
 		log:              log.NewLogger("lb-global-descriptor"),
 		defaultGlobalCfg: lbHandler.DefaultLBGlobalConfig(),
 	}
-	ctx.log.Warnf("DEBUG_STUFF : NewLBGlobalDescriptor")
+	// ctx.log.Warnf("DEBUG_STUFF : NewLBGlobalDescriptor")
 
 	typedDescr := &adapter.LBGlobalDescriptor{
 		Name:                 LBGlobalDescriptorName,
@@ -74,7 +74,7 @@ func NewLBGlobalDescriptor(lbHandler vppcalls.LbVppAPI, log logging.PluginLogger
 
 // EquivalentLBGlobal compares two LB global configs for equality.
 func (d *LBGlobalDescriptor) EquivalentLBGlobal(key string, oldGlobalCfg, newGlobalCfg *lb.LBGlobal) bool {
-	d.log.Warnf("DEBUG_STUFF : EquivalentLBGlobal %v %v %v", key, oldGlobalCfg, newGlobalCfg)
+	// d.log.Warnf("DEBUG_STUFF : EquivalentLBGlobal %v %v %v", key, oldGlobalCfg, newGlobalCfg)
 	if oldGlobalCfg.GetIp4SrcAddress() != newGlobalCfg.GetIp4SrcAddress() {
 		return false
 	}
@@ -93,7 +93,7 @@ func (d *LBGlobalDescriptor) EquivalentLBGlobal(key string, oldGlobalCfg, newGlo
 
 // Validate validates VPP LB global configuration.
 func (d *LBGlobalDescriptor) Validate(key string, globalCfg *lb.LBGlobal) error {
-	d.log.Warnf("DEBUG_STUFF : Validate %v %v", key, globalCfg)
+	// d.log.Warnf("DEBUG_STUFF : Validate %v %v", key, globalCfg)
 
 	srcUndefined := kvs.NewInvalidValueError(ErrSrcUndefined, "src_address")
 	srcAmbiguous := kvs.NewInvalidValueError(ErrSrcAmbiguous, "src_address")
@@ -109,20 +109,20 @@ func (d *LBGlobalDescriptor) Validate(key string, globalCfg *lb.LBGlobal) error 
 
 // Create applies LB global options.
 func (d *LBGlobalDescriptor) Create(key string, globalCfg *lb.LBGlobal) (metadata interface{}, err error) {
-	d.log.Warnf("DEBUG_STUFF : Create %v %v", key, globalCfg)
+	// d.log.Warnf("DEBUG_STUFF : Create %v %v", key, globalCfg)
 	return d.Update(key, d.defaultGlobalCfg, globalCfg, nil)
 }
 
 // Delete sets LB global options back to the defaults.
 func (d *LBGlobalDescriptor) Delete(key string, globalCfg *lb.LBGlobal, metadata interface{}) error {
-	d.log.Warnf("DEBUG_STUFF : Delete %v %v", key, globalCfg)
+	// d.log.Warnf("DEBUG_STUFF : Delete %v %v", key, globalCfg)
 	_, err := d.Update(key, globalCfg, d.defaultGlobalCfg, metadata)
 	return err
 }
 
 // Update updates LB global options.
 func (d *LBGlobalDescriptor) Update(key string, oldGlobalCfg, newGlobalCfg *lb.LBGlobal, oldMetadata interface{}) (newMetadata interface{}, err error) {
-	d.log.Warnf("DEBUG_STUFF : Update %v %v %v", key, oldGlobalCfg, newGlobalCfg)
+	// d.log.Warnf("DEBUG_STUFF : Update %v %v %v", key, oldGlobalCfg, newGlobalCfg)
 
 	d.lbHandler.SetLBConf(newGlobalCfg.Ip4SrcAddress, newGlobalCfg.Bucket, newGlobalCfg.Timeout)
 	// update virtual reassembly for IPv4
@@ -139,7 +139,7 @@ func (d *LBGlobalDescriptor) Update(key string, oldGlobalCfg, newGlobalCfg *lb.L
 
 // Retrieve returns the current NAT44 global configuration.
 func (d *LBGlobalDescriptor) Retrieve(correlate []adapter.LBGlobalKVWithMetadata) ([]adapter.LBGlobalKVWithMetadata, error) {
-	d.log.Warnf("DEBUG_STUFF : Retrieve")
+	// d.log.Warnf("DEBUG_STUFF : Retrieve")
 	// Note: either this descriptor (deprecated) or separate interface / address pool descriptors
 	// can retrieve NAT interfaces / address pools, never both of them. Use correlate to decide.
 	// d.UseDeprecatedAPI = false
@@ -173,7 +173,7 @@ func (d *LBGlobalDescriptor) Retrieve(correlate []adapter.LBGlobalKVWithMetadata
 //   - nat.NatAddress for every IP address to be added into the NAT address pool,
 //   - nat.NatInterface for every interface with assigned NAT configuration.
 func (d *LBGlobalDescriptor) DerivedValues(key string, globalCfg *lb.LBGlobal) (derValues []kvs.KeyValuePair) {
-	d.log.Warnf("DEBUG_STUFF : DerivedValues %v %v", key, globalCfg)
+	// d.log.Warnf("DEBUG_STUFF : DerivedValues %v %v", key, globalCfg)
 	// NAT addresses
 	// for _, natAddr := range globalCfg.AddressPool {
 	// 	derValues = append(derValues, kvs.KeyValuePair{
