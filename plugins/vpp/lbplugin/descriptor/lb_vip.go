@@ -56,7 +56,7 @@ func NewLBVipDescriptor(lbHandler vppcalls.LbVppAPI, log logging.PluginLogger) *
 		lbHandler: lbHandler,
 		log:       log.NewLogger("lb-vip-descriptor"),
 	}
-	ctx.log.Warnf("DEBUG_STUFF : NewLBVipDescriptor")
+	// ctx.log.Warnf("DEBUG_STUFF : NewLBVipDescriptor")
 
 	typedDescr := &adapter.LBVipDescriptor{
 		Name:                 LBVipDescriptorName,
@@ -74,7 +74,7 @@ func NewLBVipDescriptor(lbHandler vppcalls.LbVppAPI, log logging.PluginLogger) *
 
 // Validate validates VIP configuration.
 func (d *LBVipDescriptor) Validate(key string, vip *lb.LBVip) error {
-	d.log.Warnf("DEBUG_STUFF : Validate %v %v", key, vip)
+	// d.log.Warnf("DEBUG_STUFF : Validate %v %v", key, vip)
 
 	switch p := vip.GetProtocol(); p {
 	case 0:
@@ -120,14 +120,14 @@ func (d *LBVipDescriptor) Validate(key string, vip *lb.LBVip) error {
 
 // Create adds LB VIP
 func (d *LBVipDescriptor) Create(key string, vip *lb.LBVip) (metadata interface{}, err error) {
-	d.log.Warnf("DEBUG_STUFF : Create %v %v", key, vip)
+	// d.log.Warnf("DEBUG_STUFF : Create %v %v", key, vip)
 	d.lbHandler.AddLBVip(vip.GetPrefix(), uint8(vip.GetProtocol()), uint16(vip.GetPort()), vip.GetEncap(), uint8(vip.GetDscp()), vip.GetSrvType(), uint16(vip.GetTargetPort()), uint16(vip.GetNodePort()), vip.GetNewLen())
 	return nil, nil
 }
 
 // Delete sets LB global options back to the defaults.
 func (d *LBVipDescriptor) Delete(key string, vip *lb.LBVip, metadata interface{}) error {
-	d.log.Warnf("DEBUG_STUFF : Delete %v %v", key, vip)
+	// d.log.Warnf("DEBUG_STUFF : Delete %v %v", key, vip)
 	d.lbHandler.DelLBVip(vip.GetPrefix(), uint8(vip.GetProtocol()), uint16(vip.GetPort()))
 	return nil
 }
@@ -135,7 +135,7 @@ func (d *LBVipDescriptor) Delete(key string, vip *lb.LBVip, metadata interface{}
 // Retrieve returns the current VIPS.
 
 func (d *LBVipDescriptor) Retrieve(correlate []adapter.LBVipKVWithMetadata) (retrieved []adapter.LBVipKVWithMetadata, err error) {
-	d.log.Warnf("DEBUG_STUFF : Retrieve Vips")
+	// d.log.Warnf("DEBUG_STUFF : Retrieve Vips")
 	vips, err := d.lbHandler.LBVipDump()
 	if err != nil {
 		return nil, err

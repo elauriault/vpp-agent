@@ -16,18 +16,20 @@ package vpp2001
 
 import (
 	"fmt"
+	"net"
 
+	ip_types "go.ligato.io/vpp-agent/v3/plugins/vpp/binapi/vpp2001/ip_types"
 	lbba "go.ligato.io/vpp-agent/v3/plugins/vpp/binapi/vpp2001/lb"
 	lb "go.ligato.io/vpp-agent/v3/proto/ligato/vpp/lb"
 )
 
 func (h *LbVppHandler) LBGlobalConfigDump() *lb.LBGlobal {
-	h.log.Warnf("DEBUG_STUFF : LBGlobalConfigDump : curently no API in VPP lb plugin, needs hackish implementation")
+	// h.log.Warnf("DEBUG_STUFF : LBGlobalConfigDump : curently no API in VPP lb plugin")
 	return nil
 }
 
 func (h *LbVppHandler) DefaultLBGlobalConfig() *lb.LBGlobal {
-	h.log.Warnf("DEBUG_STUFF : DefaultLBGlobalConfig : returns defaults")
+	// h.log.Warnf("DEBUG_STUFF : DefaultLBGlobalConfig : returns defaults")
 	return &lb.LBGlobal{
 		Ip4SrcAddress: "255.255.255.255",
 		Ip6SrcAddress: "",
@@ -44,8 +46,9 @@ func uintToBool(value uint8) bool {
 }
 
 func (h *LbVppHandler) LBVipDump() ([]*lb.LBVip, error) {
+	var vipLst []*lb.LBVip
 
-	h.log.Warnf("DEBUG_STUFF : Entering LBVipDump")
+	// h.log.Warnf("DEBUG_STUFF : Entering LBVipDump")
 	req := &lbba.LbVipDump{}
 	reqContext := h.callsChannel.SendMultiRequest(req)
 
@@ -58,15 +61,28 @@ func (h *LbVppHandler) LBVipDump() ([]*lb.LBVip, error) {
 		if stop {
 			break
 		}
-		h.log.Warnf("DEBUG_STUFF : LBVipDump : %v", msg)
+		// h.log.Warnf("DEBUG_STUFF : LBVipDump : %v", msg)
+
+		vip := &lb.LBVip{
+			Prefix:     PrefixToString(msg.Vip.Pfx),
+			Protocol:   uint32(msg.Vip.Protocol),
+			Port:       uint32(msg.Vip.Port),
+			Encap:      lb.LBVip_Encap(msg.Encap),
+			Dscp:       uint32(msg.Dscp),
+			SrvType:    lb.LBVip_SrvType(msg.SrvType),
+			TargetPort: uint32(msg.TargetPort),
+			NewLen:     uint32(msg.FlowTableLength),
+		}
+		vipLst = append(vipLst, vip)
 	}
 
-	return nil, nil
+	return vipLst, nil
 }
 
 func (h *LbVppHandler) LBAsDump() ([]*lb.LBAs, error) {
+	var asLst []*lb.LBAs
 
-	h.log.Warnf("DEBUG_STUFF : Entering LBAsDump")
+	// h.log.Warnf("DEBUG_STUFF : Entering LBAsDump")
 	req := &lbba.LbAsDump{}
 	reqContext := h.callsChannel.SendMultiRequest(req)
 
@@ -79,8 +95,45 @@ func (h *LbVppHandler) LBAsDump() ([]*lb.LBAs, error) {
 		if stop {
 			break
 		}
-		h.log.Warnf("DEBUG_STUFF : LBAsDump : %v", msg)
+		// h.log.Warnf("DEBUG_STUFF : LBAsDump : %v", msg)
+		as := &lb.LBAs{
+			Prefix:   PrefixToString(msg.Vip.Pfx),
+			Protocol: uint32(msg.Vip.Protocol),
+			Port:     uint32(msg.Vip.Port),
+			Address:  AddressToString(msg.AppSrv),
+		}
+		asLst = append(asLst, as)
+	}
+	// h.log.Warnf("DEBUG_STUFF : LBVipDump : %v", asLst)
+
+	return asLst, nil
+}
+func AddressToString(p ip_types.Address) string {
+	var str string
+
+	switch af := p.Af; af {
+	case ip_types.ADDRESS_IP4:
+		ip := p.Un.GetIP6()
+		str = net.IP(ip[12:16]).String()
+	case ip_types.ADDRESS_IP6:
+		ip := p.Un.GetIP6()
+		str = net.IP(ip[:]).String()
 	}
 
-	return nil, nil
+	return str
+}
+
+func PrefixToString(p lbba.AddressWithPrefix) string {
+	var str string
+
+	switch af := p.Address.Af; af {
+	case ip_types.ADDRESS_IP4:
+		ip := p.Address.Un.GetIP6()
+		str = fmt.Sprintf("%v/%d", net.IP(ip[12:16]).String(), p.Len-96)
+	case ip_types.ADDRESS_IP6:
+		ip := p.Address.Un.GetIP6()
+		str = fmt.Sprintf("%v/%d", net.IP(ip[:]).String(), p.Len)
+	}
+
+	return str
 }
