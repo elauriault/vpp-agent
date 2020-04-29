@@ -15,6 +15,8 @@
 package vppcalls
 
 import (
+	"errors"
+
 	govppapi "git.fd.io/govpp.git/api"
 	"go.ligato.io/cn-infra/v2/logging"
 
@@ -22,6 +24,11 @@ import (
 
 	"go.ligato.io/vpp-agent/v3/plugins/vpp/ifplugin/ifaceidx"
 	lb "go.ligato.io/vpp-agent/v3/proto/ligato/vpp/lb"
+)
+
+var (
+	// ErrGlobalConfigDumpNotImplemented is used for LbVppAPI handlers that are missing implementation.
+	ErrGlobalConfigDumpNotImplemented = errors.New("global config dump not implemented")
 )
 
 // LbVppAPI provides methods for managing LB
@@ -38,7 +45,7 @@ type LbVppAPI interface {
 // LbVppRead provides read methods for LB
 type LbVppRead interface {
 	DefaultLBGlobalConfig() *lb.LBGlobal
-	LBGlobalConfigDump() *lb.LBGlobal
+	LBGlobalConfigDump() (*lb.LBGlobal, error)
 	LBVipDump() ([]*lb.LBVip, error)
 	LBAsDump() ([]*lb.LBAs, error)
 }

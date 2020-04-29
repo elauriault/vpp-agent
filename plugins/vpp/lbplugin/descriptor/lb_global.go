@@ -149,11 +149,11 @@ func (d *LBGlobalDescriptor) Retrieve(correlate []adapter.LBGlobalKVWithMetadata
 	// 	}
 	// }
 
-	globalCfg := d.lbHandler.LBGlobalConfigDump()
-	// if err != nil {
-	// 	d.log.Error(err)
-	// 	return nil, err
-	// }
+	globalCfg, err := d.lbHandler.LBGlobalConfigDump()
+	if err != nil {
+		d.log.Error(err)
+		return nil, err
+	}
 
 	origin := kvs.FromNB
 	if proto.Equal(globalCfg, d.defaultGlobalCfg) {

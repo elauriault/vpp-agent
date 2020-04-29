@@ -15,6 +15,7 @@
 package lbplugin
 
 import (
+	"go.ligato.io/cn-infra/v2/health/statuscheck"
 	"go.ligato.io/cn-infra/v2/logging"
 
 	"go.ligato.io/vpp-agent/v3/plugins/govppmux"
@@ -30,6 +31,7 @@ func NewPlugin(opts ...Option) *LBPlugin {
 	p := &LBPlugin{}
 
 	p.PluginName = "vpp-lbplugin"
+	p.StatusCheck = &statuscheck.DefaultPlugin
 	p.KVScheduler = &kvscheduler.DefaultPlugin
 	p.VPP = &govppmux.DefaultPlugin
 	p.IfPlugin = &ifplugin.DefaultPlugin
