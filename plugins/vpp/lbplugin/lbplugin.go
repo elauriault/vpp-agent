@@ -24,6 +24,7 @@ import (
 	"go.ligato.io/cn-infra/v2/infra"
 
 	"go.ligato.io/vpp-agent/v3/plugins/govppmux"
+	"go.ligato.io/vpp-agent/v3/plugins/kvscheduler"
 	kvs "go.ligato.io/vpp-agent/v3/plugins/kvscheduler/api"
 	"go.ligato.io/vpp-agent/v3/plugins/vpp/ifplugin"
 	"go.ligato.io/vpp-agent/v3/plugins/vpp/lbplugin/descriptor"
@@ -31,6 +32,10 @@ import (
 
 	_ "go.ligato.io/vpp-agent/v3/plugins/vpp/lbplugin/vppcalls/vpp2001"
 )
+
+func init() {
+	kvscheduler.AddNonRetryableError(vppcalls.ErrGlobalConfigDumpNotImplemented)
+}
 
 // LBPlugin configures VPP LB rules using GoVPP.
 type LBPlugin struct {

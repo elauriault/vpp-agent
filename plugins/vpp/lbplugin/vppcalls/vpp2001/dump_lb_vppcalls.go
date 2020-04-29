@@ -20,19 +20,21 @@ import (
 
 	ip_types "go.ligato.io/vpp-agent/v3/plugins/vpp/binapi/vpp2001/ip_types"
 	lbba "go.ligato.io/vpp-agent/v3/plugins/vpp/binapi/vpp2001/lb"
+	"go.ligato.io/vpp-agent/v3/plugins/vpp/lbplugin/vppcalls"
 	lb "go.ligato.io/vpp-agent/v3/proto/ligato/vpp/lb"
 )
 
-func (h *LbVppHandler) LBGlobalConfigDump() *lb.LBGlobal {
+func (h *LbVppHandler) LBGlobalConfigDump() (*lb.LBGlobal, error) {
 	// h.log.Warnf("DEBUG_STUFF : LBGlobalConfigDump : curently no API in VPP lb plugin")
-	return nil
+	return nil, vppcalls.ErrGlobalConfigDumpNotImplemented
+
 }
 
 func (h *LbVppHandler) DefaultLBGlobalConfig() *lb.LBGlobal {
 	// h.log.Warnf("DEBUG_STUFF : DefaultLBGlobalConfig : returns defaults")
 	return &lb.LBGlobal{
 		Ip4SrcAddress: "255.255.255.255",
-		Ip6SrcAddress: "",
+		Ip6SrcAddress: "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
 		Bucket:        4,
 		Timeout:       4,
 	}
