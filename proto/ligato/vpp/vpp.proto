@@ -25,6 +25,7 @@ import "ligato/vpp/nat/nat.proto";
 import "ligato/vpp/punt/punt.proto";
 import "ligato/vpp/srv6/srv6.proto";
 import "ligato/vpp/wireguard/wireguard.proto";
+import "ligato/vpp/lb/lb.proto";
 
 // ConfigData holds the entire VPP configuration.
 message ConfigData {
@@ -71,6 +72,10 @@ message ConfigData {
     repeated ipfix.FlowProbeFeature ipfix_flowprobes = 92;
 
     repeated wireguard.Peer wg_peers = 93;
+
+    lb.LBGlobal lb_global = 94;
+    repeated lb.LBVip lb_vips = 95;
+    repeated lb.LBAs lb_as = 96;
 }
 
 message Notification {

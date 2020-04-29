@@ -21,6 +21,7 @@ import (
 	vpp_ipsec "go.ligato.io/vpp-agent/v3/proto/ligato/vpp/ipsec"
 	vpp_l2 "go.ligato.io/vpp-agent/v3/proto/ligato/vpp/l2"
 	vpp_l3 "go.ligato.io/vpp-agent/v3/proto/ligato/vpp/l3"
+	vpp_lb "go.ligato.io/vpp-agent/v3/proto/ligato/vpp/lb"
 	vpp_nat "go.ligato.io/vpp-agent/v3/proto/ligato/vpp/nat"
 	vpp_punt "go.ligato.io/vpp-agent/v3/proto/ligato/vpp/punt"
 	vpp_srv6 "go.ligato.io/vpp-agent/v3/proto/ligato/vpp/srv6"
@@ -74,4 +75,9 @@ type (
 
 	// Wireguard
 	WgPeer = vpp_wg.Peer
+
+	// LB
+	LBGlobal = vpp_lb.LBGlobal
+	LBVip    = vpp_lb.LBVip
+	LBAs     = vpp_lb.LBAs
 )
