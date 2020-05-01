@@ -31,7 +31,7 @@ func (h *LbVppHandler) LBGlobalConfigDump() (*lb.LBGlobal, error) {
 }
 
 func (h *LbVppHandler) DefaultLBGlobalConfig() *lb.LBGlobal {
-	h.log.Warnf("DEBUG_STUFF : DefaultLBGlobalConfig : returns defaults")
+	// h.log.Warnf("DEBUG_STUFF : DefaultLBGlobalConfig : returns defaults")
 	return &lb.LBGlobal{
 		Ip4SrcAddress: "255.255.255.255",
 		Ip6SrcAddress: "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
@@ -106,7 +106,7 @@ func (h *LbVppHandler) LBVipDump() ([]*lb.LBVip, error) {
 func (h *LbVppHandler) LBAsDump() ([]*lb.LBAs, error) {
 	var asLst []*lb.LBAs
 
-	h.log.Warnf("DEBUG_STUFF : Entering LBAsDump")
+	// h.log.Warnf("DEBUG_STUFF : Entering LBAsDump")
 	req := &lbba.LbAsDump{}
 	reqContext := h.callsChannel.SendMultiRequest(req)
 
