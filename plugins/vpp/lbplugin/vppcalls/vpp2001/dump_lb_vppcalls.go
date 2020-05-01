@@ -86,6 +86,7 @@ func (h *LbVppHandler) LBVipDump() ([]*lb.LBVip, error) {
 		// h.log.Warnf("DEBUG_STUFF : LBVipDump : %v\n", msg)
 		// h.log.Warnf("DEBUG_STUFF : LBVipDump encap : %v, %v, %v\n", msg.Encap, lbba.LbVipType(msg.Encap), encap)
 		// h.log.Warnf("DEBUG_STUFF : LBVipDump encap : %d, %d\n", msg.Encap, encap)
+		// h.log.Warnf("DEBUG_STUFF : LBVipDump proto : %v, %d\n", msg.Vip.Protocol, proto)
 
 		vip := &lb.LBVip{
 			Prefix:     PrefixToString(msg.Vip.Pfx),
@@ -105,6 +106,7 @@ func (h *LbVppHandler) LBVipDump() ([]*lb.LBVip, error) {
 
 func (h *LbVppHandler) LBAsDump() ([]*lb.LBAs, error) {
 	var asLst []*lb.LBAs
+	var proto uint32
 
 	// h.log.Warnf("DEBUG_STUFF : Entering LBAsDump")
 	req := &lbba.LbAsDump{}
@@ -119,10 +121,17 @@ func (h *LbVppHandler) LBAsDump() ([]*lb.LBAs, error) {
 		if stop {
 			break
 		}
+
+		if msg.Vip.Protocol == ip_types.IP_API_PROTO_RESERVED {
+			proto = 0
+		} else {
+			proto = uint32(msg.Vip.Protocol)
+		}
+
 		// h.log.Warnf("DEBUG_STUFF : LBAsDump : %v", msg)
 		as := &lb.LBAs{
 			Prefix:   PrefixToString(msg.Vip.Pfx),
-			Protocol: uint32(msg.Vip.Protocol),
+			Protocol: proto,
 			Port:     uint32(msg.Vip.Port),
 			Address:  AddressToString(msg.AppSrv),
 		}
@@ -138,7 +147,7 @@ func AddressToString(p ip_types.Address) string {
 	switch af := p.Af; af {
 	case ip_types.ADDRESS_IP4:
 		ip := p.Un.GetIP6()
-		str = net.IP(ip[12:16]).String()
+		str = net.IP(ip[0:4]).String()
 	case ip_types.ADDRESS_IP6:
 		ip := p.Un.GetIP6()
 		str = net.IP(ip[:]).String()
