@@ -15,6 +15,8 @@
 package descriptor
 
 import (
+	"errors"
+
 	"go.ligato.io/cn-infra/v2/logging"
 
 	kvs "go.ligato.io/vpp-agent/v3/plugins/kvscheduler/api"
@@ -30,8 +32,10 @@ const (
 
 // A list of non-retriable errors:
 var (
-// ErrSrcUndefined = errors.New("Neither Ip4SrcAddress or Ip6SrcAddress is defined")
-// ErrSrcAmbiguous = errors.New("Both Ip4SrcAddress and Ip6SrcAddress are defined")
+	// ErrSrcUndefined = errors.New("Neither Ip4SrcAddress or Ip6SrcAddress is defined")
+	// ErrSrcAmbiguous = errors.New("Both Ip4SrcAddress and Ip6SrcAddress are defined")
+	ErrAS4 = errors.New("v4 AS requires a v4 VIP")
+	ErrAS6 = errors.New("v6 AS requires a v6 VIP")
 )
 
 // LBAsDescriptor teaches KVScheduler how to configure global options for
@@ -69,21 +73,32 @@ func NewLBAsDescriptor(lbHandler vppcalls.LbVppAPI, log logging.PluginLogger) *k
 }
 
 // Validate validates AS configuration.
-func (d *LBAsDescriptor) Validate(key string, vip *lb.LBAs) error {
+func (d *LBAsDescriptor) Validate(key string, as *lb.LBAs) error {
 	// d.log.Warnf("DEBUG_STUFF : Validate %v %v", key, vip)
 
-	switch p := vip.GetProtocol(); p {
+	switch p := as.GetProtocol(); p {
 	case 0:
-		if vip.GetPort() != 0 {
+		if as.GetPort() != 0 {
 			return ErrProtocol
 		}
 	case 6:
-		if vip.GetPort() == 0 {
+		if as.GetPort() == 0 {
 			return ErrPort
 		}
 	case 17:
-		if vip.GetPort() == 0 {
+		if as.GetPort() == 0 {
 			return ErrPort
+		}
+	}
+
+	if is_v4(as.GetPrefix()) {
+		if !is_v4(as.GetAddress()) {
+			return ErrAS4
+		}
+	}
+	if is_v6(as.GetPrefix()) {
+		if !is_v6(as.GetAddress()) {
+			return ErrAS6
 		}
 	}
 

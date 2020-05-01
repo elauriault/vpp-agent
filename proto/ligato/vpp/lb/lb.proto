@@ -27,7 +27,6 @@ message LBVip {
     enum Srv_type {
         CLUSTERIP = 0;
         NODEPORT = 1;
-        N_TYPES = 2;
     }
     Srv_type srv_type = 6;
     uint32 target_port = 7;
