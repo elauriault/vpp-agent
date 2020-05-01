@@ -82,7 +82,7 @@ func NewLBVipDescriptor(lbHandler vppcalls.LbVppAPI, log logging.PluginLogger) *
 func (d *LBVipDescriptor) Validate(key string, vip *lb.LBVip) error {
 
 	var str string
-	d.log.Warnf("DEBUG_STUFF : Validate %v %v", key, vip)
+	// d.log.Warnf("DEBUG_STUFF : Validate %v %v", key, vip)
 
 	switch p := vip.GetProtocol(); p {
 	case 0:
@@ -171,7 +171,7 @@ func (d *LBVipDescriptor) Validate(key string, vip *lb.LBVip) error {
 		}
 		str = fmt.Sprintf("%v", address.String())
 	}
-	d.log.Warnf("DEBUG_STUFF : Validate %v == %v?\n", str, prefix)
+	// d.log.Warnf("DEBUG_STUFF : Validate %v == %v?\n", str, prefix)
 	if str != prefix {
 		return ErrPfx
 	}
@@ -181,7 +181,7 @@ func (d *LBVipDescriptor) Validate(key string, vip *lb.LBVip) error {
 
 // Create adds LB VIP
 func (d *LBVipDescriptor) Create(key string, vip *lb.LBVip) (metadata interface{}, err error) {
-	d.log.Warnf("DEBUG_STUFF : Create %v %v\n", key, vip)
+	// d.log.Warnf("DEBUG_STUFF : Create %v %v\n", key, vip)
 	d.lbHandler.AddLBVip(vip.GetPrefix(), uint8(vip.GetProtocol()), uint16(vip.GetPort()), vip.GetEncap(), uint8(vip.GetDscp()), vip.GetSrvType(), uint16(vip.GetTargetPort()), uint16(vip.GetNodePort()), vip.GetNewLen())
 	return nil, nil
 }
@@ -202,7 +202,7 @@ func (d *LBVipDescriptor) Retrieve(correlate []adapter.LBVipKVWithMetadata) (ret
 		return nil, err
 	}
 	for _, vip := range vips {
-		d.log.Warnf("DEBUG_STUFF : Retrieve vip %v\n", vip)
+		// d.log.Warnf("DEBUG_STUFF : Retrieve vip %v\n", vip)
 		retrieved = append(retrieved, adapter.LBVipKVWithMetadata{
 			Key:    lb.LBVipKey(vip.GetPrefix(), vip.GetProtocol(), vip.GetPort()),
 			Value:  vip,
