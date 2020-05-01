@@ -76,6 +76,29 @@ func (h *LbVppHandler) DelLBVip(prefix string, protocol uint8, port uint16) erro
 
 func (h *LbVppHandler) UpdateLBVip(prefix string, protocol uint8, port uint16, encap lb.LBVip_Encap, dscp uint8, srv_type lb.LBVip_SrvType, targetport, nodeport uint16, len uint32, del bool) error {
 
+	var e lbba.LbEncapType
+	var s lbba.LbSrvType
+
+	switch encap {
+	case lb.LBVip_GRE4:
+		e = lbba.LB_API_ENCAP_TYPE_GRE4
+	case lb.LBVip_GRE6:
+		e = lbba.LB_API_ENCAP_TYPE_GRE6
+	case lb.LBVip_NAT4:
+		e = lbba.LB_API_ENCAP_TYPE_NAT4
+	case lb.LBVip_NAT6:
+		e = lbba.LB_API_ENCAP_TYPE_NAT6
+	case lb.LBVip_L3DSR:
+		e = lbba.LB_API_ENCAP_TYPE_L3DSR
+	}
+
+	switch srv_type {
+	case lb.LBVip_CLUSTERIP:
+		s = lbba.LB_API_SRV_TYPE_CLUSTERIP
+	case lb.LBVip_NODEPORT:
+		s = lbba.LB_API_SRV_TYPE_NODEPORT
+	}
+
 	Pfx, err := toPrefix(prefix, h)
 	// h.log.Warnf("DEBUG_STUFF : UpdateLBVip %v %v %v %v", prefix, encap, len, err)
 	// h.log.Warnf("DEBUG_STUFF : UpdateLBVip toPrefix %v", Pfx)
@@ -92,9 +115,9 @@ func (h *LbVppHandler) UpdateLBVip(prefix string, protocol uint8, port uint16, e
 		Pfx:                 Pfx,
 		Protocol:            protocol,
 		Port:                port,
-		Encap:               lbba.LbEncapType(encap),
+		Encap:               e,
 		Dscp:                dscp,
-		Type:                lbba.LbSrvType(srv_type),
+		Type:                s,
 		TargetPort:          targetport,
 		NodePort:            nodeport,
 		NewFlowsTableLength: len,
