@@ -1,4 +1,4 @@
-//  Copyright (c) 2019 Cisco and/or its affiliates.
+//  Copyright (c) 2020 Ubisoft Entertainment and/or its affiliates.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -49,15 +49,15 @@ func uintToBool(value uint8) bool {
 
 func (h *LbVppHandler) LBVipDump() ([]*lb.LBVip, error) {
 	var vipLst []*lb.LBVip
-	var proto uint32
-	var encap lb.LBVip_Encap
-	var srvtype lb.LBVip_SrvType
 
 	// h.log.Warnf("DEBUG_STUFF : Entering LBVipDump")
 	req := &lbba.LbVipDump{}
 	reqContext := h.callsChannel.SendMultiRequest(req)
 
 	for {
+		var proto uint32
+		var encap lb.LBVip_Encap
+		var srvtype lb.LBVip_SrvType
 		msg := &lbba.LbVipDetails{}
 		stop, err := reqContext.ReceiveReply(msg)
 		if err != nil {
