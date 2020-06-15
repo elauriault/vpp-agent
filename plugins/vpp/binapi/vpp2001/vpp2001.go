@@ -22,10 +22,12 @@ import (
 	"go.ligato.io/vpp-agent/v3/plugins/vpp/binapi/vpp2001/af_packet"
 	"go.ligato.io/vpp-agent/v3/plugins/vpp/binapi/vpp2001/bond"
 	"go.ligato.io/vpp-agent/v3/plugins/vpp/binapi/vpp2001/dhcp"
+	"go.ligato.io/vpp-agent/v3/plugins/vpp/binapi/vpp2001/flowprobe"
 	"go.ligato.io/vpp-agent/v3/plugins/vpp/binapi/vpp2001/gre"
 	"go.ligato.io/vpp-agent/v3/plugins/vpp/binapi/vpp2001/gtpu"
 	"go.ligato.io/vpp-agent/v3/plugins/vpp/binapi/vpp2001/interfaces"
 	"go.ligato.io/vpp-agent/v3/plugins/vpp/binapi/vpp2001/ip"
+	"go.ligato.io/vpp-agent/v3/plugins/vpp/binapi/vpp2001/ipfix_export"
 	"go.ligato.io/vpp-agent/v3/plugins/vpp/binapi/vpp2001/ipip"
 	"go.ligato.io/vpp-agent/v3/plugins/vpp/binapi/vpp2001/ipsec"
 	"go.ligato.io/vpp-agent/v3/plugins/vpp/binapi/vpp2001/l2"
@@ -57,6 +59,7 @@ func init() {
 			gre.AllMessages,
 			interfaces.AllMessages,
 			ip.AllMessages,
+			ipfix_export.AllMessages,
 			ipsec.AllMessages,
 			l2.AllMessages,
 			memclnt.AllMessages,
@@ -72,6 +75,7 @@ func init() {
 		Plugins: vpp.Messages(
 			abf.AllMessages,
 			acl.AllMessages,
+			flowprobe.AllMessages,
 			gtpu.AllMessages,
 			l3xc.AllMessages,
 			lb.AllMessages,
@@ -83,15 +87,15 @@ func init() {
 	}
 }
 
-//go:generate binapi-generator --output-dir=. --input-file=$VPP_API_DIR/core/ethernet_types.api.json
-//go:generate binapi-generator --output-dir=. --input-file=$VPP_API_DIR/core/interface_types.api.json
-//go:generate binapi-generator --output-dir=. --input-file=$VPP_API_DIR/core/ip_types.api.json
-//go:generate binapi-generator --output-dir=. --input-file=$VPP_API_DIR/core/fib_types.api.json --input-types=$VPP_API_DIR/core/ethernet_types.api.json,$VPP_API_DIR/core/interface_types.api.json,$VPP_API_DIR/core/ip_types.api.json
-//go:generate binapi-generator --output-dir=. --input-file=$VPP_API_DIR/core/ipsec_types.api.json --input-types=$VPP_API_DIR/core/ethernet_types.api.json,$VPP_API_DIR/core/interface_types.api.json,$VPP_API_DIR/core/ip_types.api.json
-//go:generate binapi-generator --output-dir=. --input-file=$VPP_API_DIR/core/vpe_types.api.json
+//go:generate -command binapigentypes binapi-generator --output-dir=. --import-prefix=go.ligato.io/vpp-agent/v3/plugins/vpp/binapi/vpp2001/
+//go:generate binapigentypes --input-file=$VPP_API_DIR/core/ethernet_types.api.json
+//go:generate binapigentypes --input-file=$VPP_API_DIR/core/interface_types.api.json
+//go:generate binapigentypes --input-file=$VPP_API_DIR/core/ip_types.api.json
+//go:generate binapigentypes --input-file=$VPP_API_DIR/core/fib_types.api.json --input-types=$VPP_API_DIR/core/ethernet_types.api.json,$VPP_API_DIR/core/interface_types.api.json,$VPP_API_DIR/core/ip_types.api.json
+//go:generate binapigentypes --input-file=$VPP_API_DIR/core/ipsec_types.api.json --input-types=$VPP_API_DIR/core/ethernet_types.api.json,$VPP_API_DIR/core/interface_types.api.json,$VPP_API_DIR/core/ip_types.api.json
+//go:generate binapigentypes --input-file=$VPP_API_DIR/core/vpe_types.api.json
 
-//go:generate -command binapigen binapi-generator --output-dir=. --input-types=$VPP_API_DIR/core/ethernet_types.api.json,$VPP_API_DIR/core/interface_types.api.json,$VPP_API_DIR/core/ip_types.api.json,$VPP_API_DIR/core/fib_types.api.json,$VPP_API_DIR/core/ipsec_types.api.json,$VPP_API_DIR/core/vpe_types.api.json
-
+//go:generate -command binapigen binapi-generator --output-dir=. --import-prefix=go.ligato.io/vpp-agent/v3/plugins/vpp/binapi/vpp2001/ --input-types=$VPP_API_DIR/core/ethernet_types.api.json,$VPP_API_DIR/core/interface_types.api.json,$VPP_API_DIR/core/ip_types.api.json,$VPP_API_DIR/core/fib_types.api.json,$VPP_API_DIR/core/ipsec_types.api.json,$VPP_API_DIR/core/vpe_types.api.json
 //go:generate binapigen --input-file=$VPP_API_DIR/core/af_packet.api.json
 //go:generate binapigen --input-file=$VPP_API_DIR/core/arp.api.json
 //go:generate binapigen --input-file=$VPP_API_DIR/core/bond.api.json
@@ -99,6 +103,7 @@ func init() {
 //go:generate binapigen --input-file=$VPP_API_DIR/core/interface.api.json
 //go:generate binapigen --input-file=$VPP_API_DIR/core/ip.api.json
 //go:generate binapigen --input-file=$VPP_API_DIR/core/ip_neighbor.api.json
+//go:generate binapigen --input-file=$VPP_API_DIR/core/ipfix_export.api.json
 //go:generate binapigen --input-file=$VPP_API_DIR/core/ipsec.api.json
 //go:generate binapigen --input-file=$VPP_API_DIR/core/l2.api.json
 //go:generate binapigen --input-file=$VPP_API_DIR/core/memclnt.api.json
@@ -112,6 +117,7 @@ func init() {
 //go:generate binapigen --input-file=$VPP_API_DIR/core/ipip.api.json
 //go:generate binapigen --input-file=$VPP_API_DIR/plugins/abf.api.json
 //go:generate binapigen --input-file=$VPP_API_DIR/plugins/acl.api.json
+//go:generate binapigen --input-file=$VPP_API_DIR/plugins/flowprobe.api.json
 //go:generate binapigen --input-file=$VPP_API_DIR/plugins/gtpu.api.json
 //go:generate binapigen --input-file=$VPP_API_DIR/plugins/dhcp.api.json
 //go:generate binapigen --input-file=$VPP_API_DIR/plugins/l3xc.api.json
