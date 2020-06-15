@@ -787,7 +787,9 @@ func init() {
 	proto.RegisterType((*VirtualReassembly)(nil), "ligato.vpp.nat.VirtualReassembly")
 }
 
-func init() { proto.RegisterFile("ligato/vpp/nat/nat.proto", fileDescriptor_6c5496f531b4b7d3) }
+func init() {
+	proto.RegisterFile("ligato/vpp/nat/nat.proto", fileDescriptor_6c5496f531b4b7d3)
+}
 
 var fileDescriptor_6c5496f531b4b7d3 = []byte{
 	// 892 bytes of a gzipped FileDescriptorProto

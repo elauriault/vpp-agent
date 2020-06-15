@@ -684,7 +684,9 @@ func init() {
 	proto.RegisterType((*ACL_Interfaces)(nil), "ligato.vpp.acl.ACL.Interfaces")
 }
 
-func init() { proto.RegisterFile("ligato/vpp/acl/acl.proto", fileDescriptor_7ad565c8fb2f0c94) }
+func init() {
+	proto.RegisterFile("ligato/vpp/acl/acl.proto", fileDescriptor_7ad565c8fb2f0c94)
+}
 
 var fileDescriptor_7ad565c8fb2f0c94 = []byte{
 	// 747 bytes of a gzipped FileDescriptorProto

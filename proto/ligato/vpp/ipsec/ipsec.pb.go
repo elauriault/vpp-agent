@@ -603,7 +603,9 @@ func init() {
 	proto.RegisterType((*TunnelProtection)(nil), "ligato.vpp.ipsec.TunnelProtection")
 }
 
-func init() { proto.RegisterFile("ligato/vpp/ipsec/ipsec.proto", fileDescriptor_3aa20672189bf205) }
+func init() {
+	proto.RegisterFile("ligato/vpp/ipsec/ipsec.proto", fileDescriptor_3aa20672189bf205)
+}
 
 var fileDescriptor_3aa20672189bf205 = []byte{
 	// 938 bytes of a gzipped FileDescriptorProto

@@ -231,7 +231,9 @@ func init() {
 	proto.RegisterType((*BridgeDomain_ArpTerminationEntry)(nil), "ligato.vpp.l2.BridgeDomain.ArpTerminationEntry")
 }
 
-func init() { proto.RegisterFile("ligato/vpp/l2/bridge_domain.proto", fileDescriptor_586a08f7e77c0089) }
+func init() {
+	proto.RegisterFile("ligato/vpp/l2/bridge_domain.proto", fileDescriptor_586a08f7e77c0089)
+}
 
 var fileDescriptor_586a08f7e77c0089 = []byte{
 	// 429 bytes of a gzipped FileDescriptorProto

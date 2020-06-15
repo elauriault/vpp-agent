@@ -129,7 +129,9 @@ func init() {
 	proto.RegisterType((*FIBEntry)(nil), "ligato.vpp.l2.FIBEntry")
 }
 
-func init() { proto.RegisterFile("ligato/vpp/l2/fib.proto", fileDescriptor_ec355b66413dddf0) }
+func init() {
+	proto.RegisterFile("ligato/vpp/l2/fib.proto", fileDescriptor_ec355b66413dddf0)
+}
 
 var fileDescriptor_ec355b66413dddf0 = []byte{
 	// 303 bytes of a gzipped FileDescriptorProto

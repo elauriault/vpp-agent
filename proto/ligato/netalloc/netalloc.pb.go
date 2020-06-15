@@ -262,7 +262,9 @@ func init() {
 	proto.RegisterType((*ConfigData)(nil), "ligato.netalloc.ConfigData")
 }
 
-func init() { proto.RegisterFile("ligato/netalloc/netalloc.proto", fileDescriptor_034a8c5cac8e0a20) }
+func init() {
+	proto.RegisterFile("ligato/netalloc/netalloc.proto", fileDescriptor_034a8c5cac8e0a20)
+}
 
 var fileDescriptor_034a8c5cac8e0a20 = []byte{
 	// 361 bytes of a gzipped FileDescriptorProto

@@ -169,7 +169,9 @@ func init() {
 	proto.RegisterType((*L3XConnect_Path)(nil), "ligato.vpp.l3.L3XConnect.Path")
 }
 
-func init() { proto.RegisterFile("ligato/vpp/l3/l3xc.proto", fileDescriptor_5bed3005c4d78611) }
+func init() {
+	proto.RegisterFile("ligato/vpp/l3/l3xc.proto", fileDescriptor_5bed3005c4d78611)
+}
 
 var fileDescriptor_5bed3005c4d78611 = []byte{
 	// 304 bytes of a gzipped FileDescriptorProto

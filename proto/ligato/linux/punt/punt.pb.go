@@ -307,7 +307,9 @@ func init() {
 	proto.RegisterType((*SocketBased)(nil), "ligato.linux.punt.SocketBased")
 }
 
-func init() { proto.RegisterFile("ligato/linux/punt/punt.proto", fileDescriptor_4b47fac4fb35071d) }
+func init() {
+	proto.RegisterFile("ligato/linux/punt/punt.proto", fileDescriptor_4b47fac4fb35071d)
+}
 
 var fileDescriptor_4b47fac4fb35071d = []byte{
 	// 365 bytes of a gzipped FileDescriptorProto

@@ -104,7 +104,9 @@ func init() {
 	proto.RegisterType((*DHCPLease)(nil), "ligato.vpp.interfaces.DHCPLease")
 }
 
-func init() { proto.RegisterFile("ligato/vpp/interfaces/dhcp.proto", fileDescriptor_3ad2cb57ecd179e8) }
+func init() {
+	proto.RegisterFile("ligato/vpp/interfaces/dhcp.proto", fileDescriptor_3ad2cb57ecd179e8)
+}
 
 var fileDescriptor_3ad2cb57ecd179e8 = []byte{
 	// 255 bytes of a gzipped FileDescriptorProto

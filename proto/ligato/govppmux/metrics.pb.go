@@ -103,7 +103,9 @@ func init() {
 	proto.RegisterType((*Metrics)(nil), "ligato.govppmux.Metrics")
 }
 
-func init() { proto.RegisterFile("ligato/govppmux/metrics.proto", fileDescriptor_a54ec93fe2fe8fda) }
+func init() {
+	proto.RegisterFile("ligato/govppmux/metrics.proto", fileDescriptor_a54ec93fe2fe8fda)
+}
 
 var fileDescriptor_a54ec93fe2fe8fda = []byte{
 	// 232 bytes of a gzipped FileDescriptorProto

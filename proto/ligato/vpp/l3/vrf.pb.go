@@ -213,7 +213,9 @@ func init() {
 	proto.RegisterType((*VrfTable_FlowHashSettings)(nil), "ligato.vpp.l3.VrfTable.FlowHashSettings")
 }
 
-func init() { proto.RegisterFile("ligato/vpp/l3/vrf.proto", fileDescriptor_4ba58f73bd5b6328) }
+func init() {
+	proto.RegisterFile("ligato/vpp/l3/vrf.proto", fileDescriptor_4ba58f73bd5b6328)
+}
 
 var fileDescriptor_4ba58f73bd5b6328 = []byte{
 	// 356 bytes of a gzipped FileDescriptorProto

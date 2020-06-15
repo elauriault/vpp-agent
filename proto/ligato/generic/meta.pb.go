@@ -115,7 +115,9 @@ func init() {
 	proto.RegisterType((*KnownModelsResponse)(nil), "ligato.generic.KnownModelsResponse")
 }
 
-func init() { proto.RegisterFile("ligato/generic/meta.proto", fileDescriptor_f153e6a4d289f1e7) }
+func init() {
+	proto.RegisterFile("ligato/generic/meta.proto", fileDescriptor_f153e6a4d289f1e7)
+}
 
 var fileDescriptor_f153e6a4d289f1e7 = []byte{
 	// 247 bytes of a gzipped FileDescriptorProto

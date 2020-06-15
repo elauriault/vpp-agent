@@ -1048,7 +1048,9 @@ func init() {
 	proto.RegisterType((*SRv6Global)(nil), "ligato.vpp.srv6.SRv6Global")
 }
 
-func init() { proto.RegisterFile("ligato/vpp/srv6/srv6.proto", fileDescriptor_f16c9933790ee176) }
+func init() {
+	proto.RegisterFile("ligato/vpp/srv6/srv6.proto", fileDescriptor_f16c9933790ee176)
+}
 
 var fileDescriptor_f16c9933790ee176 = []byte{
 	// 877 bytes of a gzipped FileDescriptorProto

@@ -199,7 +199,9 @@ func init() {
 	proto.RegisterType((*ModelDetail_Option)(nil), "ligato.generic.ModelDetail.Option")
 }
 
-func init() { proto.RegisterFile("ligato/generic/model.proto", fileDescriptor_13d85de19425b7f8) }
+func init() {
+	proto.RegisterFile("ligato/generic/model.proto", fileDescriptor_13d85de19425b7f8)
+}
 
 var fileDescriptor_13d85de19425b7f8 = []byte{
 	// 274 bytes of a gzipped FileDescriptorProto

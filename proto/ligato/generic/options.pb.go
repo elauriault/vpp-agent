@@ -34,7 +34,9 @@ func init() {
 	proto.RegisterExtension(E_Model)
 }
 
-func init() { proto.RegisterFile("ligato/generic/options.proto", fileDescriptor_2596e25d393fefd6) }
+func init() {
+	proto.RegisterFile("ligato/generic/options.proto", fileDescriptor_2596e25d393fefd6)
+}
 
 var fileDescriptor_2596e25d393fefd6 = []byte{
 	// 177 bytes of a gzipped FileDescriptorProto

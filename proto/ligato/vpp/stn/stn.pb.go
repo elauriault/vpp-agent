@@ -71,7 +71,9 @@ func init() {
 	proto.RegisterType((*Rule)(nil), "ligato.vpp.stn.Rule")
 }
 
-func init() { proto.RegisterFile("ligato/vpp/stn/stn.proto", fileDescriptor_f76a9726e8a218b9) }
+func init() {
+	proto.RegisterFile("ligato/vpp/stn/stn.proto", fileDescriptor_f76a9726e8a218b9)
+}
 
 var fileDescriptor_f76a9726e8a218b9 = []byte{
 	// 154 bytes of a gzipped FileDescriptorProto

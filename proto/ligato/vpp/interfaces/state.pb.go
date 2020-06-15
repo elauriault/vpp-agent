@@ -641,7 +641,9 @@ func init() {
 	proto.RegisterType((*InterfaceNotification)(nil), "ligato.vpp.interfaces.InterfaceNotification")
 }
 
-func init() { proto.RegisterFile("ligato/vpp/interfaces/state.proto", fileDescriptor_89357752b24c297d) }
+func init() {
+	proto.RegisterFile("ligato/vpp/interfaces/state.proto", fileDescriptor_89357752b24c297d)
+}
 
 var fileDescriptor_89357752b24c297d = []byte{
 	// 961 bytes of a gzipped FileDescriptorProto

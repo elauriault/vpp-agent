@@ -87,7 +87,9 @@ func init() {
 	proto.RegisterType((*ARPEntry)(nil), "ligato.vpp.l3.ARPEntry")
 }
 
-func init() { proto.RegisterFile("ligato/vpp/l3/arp.proto", fileDescriptor_667541aaa11bae35) }
+func init() {
+	proto.RegisterFile("ligato/vpp/l3/arp.proto", fileDescriptor_667541aaa11bae35)
+}
 
 var fileDescriptor_667541aaa11bae35 = []byte{
 	// 192 bytes of a gzipped FileDescriptorProto

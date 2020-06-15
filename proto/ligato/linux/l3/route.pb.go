@@ -139,7 +139,9 @@ func init() {
 	proto.RegisterType((*Route)(nil), "ligato.linux.l3.Route")
 }
 
-func init() { proto.RegisterFile("ligato/linux/l3/route.proto", fileDescriptor_c54d098186701b55) }
+func init() {
+	proto.RegisterFile("ligato/linux/l3/route.proto", fileDescriptor_c54d098186701b55)
+}
 
 var fileDescriptor_c54d098186701b55 = []byte{
 	// 291 bytes of a gzipped FileDescriptorProto

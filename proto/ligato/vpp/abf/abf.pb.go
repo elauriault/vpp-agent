@@ -218,7 +218,9 @@ func init() {
 	proto.RegisterType((*ABF_ForwardingPath)(nil), "ligato.vpp.abf.ABF.ForwardingPath")
 }
 
-func init() { proto.RegisterFile("ligato/vpp/abf/abf.proto", fileDescriptor_1535b8ce2775e25e) }
+func init() {
+	proto.RegisterFile("ligato/vpp/abf/abf.proto", fileDescriptor_1535b8ce2775e25e)
+}
 
 var fileDescriptor_1535b8ce2775e25e = []byte{
 	// 385 bytes of a gzipped FileDescriptorProto

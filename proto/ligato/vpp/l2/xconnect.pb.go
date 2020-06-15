@@ -71,7 +71,9 @@ func init() {
 	proto.RegisterType((*XConnectPair)(nil), "ligato.vpp.l2.XConnectPair")
 }
 
-func init() { proto.RegisterFile("ligato/vpp/l2/xconnect.proto", fileDescriptor_d21cc032e061c819) }
+func init() {
+	proto.RegisterFile("ligato/vpp/l2/xconnect.proto", fileDescriptor_d21cc032e061c819)
+}
 
 var fileDescriptor_d21cc032e061c819 = []byte{
 	// 173 bytes of a gzipped FileDescriptorProto

@@ -113,7 +113,9 @@ func init() {
 	proto.RegisterType((*Notification)(nil), "ligato.linux.Notification")
 }
 
-func init() { proto.RegisterFile("ligato/linux/linux.proto", fileDescriptor_8d75d970dbe631df) }
+func init() {
+	proto.RegisterFile("ligato/linux/linux.proto", fileDescriptor_8d75d970dbe631df)
+}
 
 var fileDescriptor_8d75d970dbe631df = []byte{
 	// 244 bytes of a gzipped FileDescriptorProto

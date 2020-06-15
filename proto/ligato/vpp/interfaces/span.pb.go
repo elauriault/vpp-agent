@@ -119,7 +119,9 @@ func init() {
 	proto.RegisterType((*Span)(nil), "ligato.vpp.interfaces.Span")
 }
 
-func init() { proto.RegisterFile("ligato/vpp/interfaces/span.proto", fileDescriptor_3db2120d57515158) }
+func init() {
+	proto.RegisterFile("ligato/vpp/interfaces/span.proto", fileDescriptor_3db2120d57515158)
+}
 
 var fileDescriptor_3db2120d57515158 = []byte{
 	// 254 bytes of a gzipped FileDescriptorProto
