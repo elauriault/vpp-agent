@@ -28,7 +28,7 @@ echo "==============================================="
 
 set -x
 
-docker build -f Dockerfile \
+docker build --ulimit memlock=67108864 -f Dockerfile \
     --build-arg VPP_IMG=${VPP_IMG} \
     --build-arg VPP_VERSION=${VPP_VERSION} \
     --build-arg VERSION=${VERSION} \
